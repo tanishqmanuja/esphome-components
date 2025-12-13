@@ -13,9 +13,9 @@ namespace {
 constexpr float kInv255 = 1.0f / 255.0f;
 }
 
-DDPMonochromaticLightEffect::DDPMonochromaticLightEffect(const std::string &name) : LightEffect(name) {}
+DDPMonochromaticLightEffect::DDPMonochromaticLightEffect(const char* name) : LightEffect(name) {}
 
-const std::string &DDPMonochromaticLightEffect::get_name() { return LightEffect::get_name(); }
+const char *DDPMonochromaticLightEffect::get_name() { return LightEffect::get_name(); }
 
 void DDPMonochromaticLightEffect::start() {
   // backup gamma for restoring when effect ends
@@ -40,7 +40,7 @@ void DDPMonochromaticLightEffect::apply() {
   // apply function is not needed normally to display changes to the light
   // from Home Assistant, but it is needed to restore value on timeout.
   if (this->timeout_check()) {
-    ESP_LOGD(TAG, "DDP stream for '%s->%s' timed out.", this->state_->get_name().c_str(), this->get_name().c_str());
+    ESP_LOGD(TAG, "DDP stream for '%s->%s' timed out.", this->state_->get_name(), this->get_name());
     this->next_packet_will_be_first_ = true;
 
     auto call = this->state_->turn_on();
