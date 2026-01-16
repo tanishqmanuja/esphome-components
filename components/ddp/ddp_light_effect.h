@@ -14,7 +14,11 @@ class DDPLightEffect : public DDPLightEffectBase, public light::LightEffect {
  public:
   DDPLightEffect(const char *name);
 
+  #if ESPHOME_VERSION_CODE >= VERSION_CODE(2026, 1, 0) 
+  esphome::StringRef get_name() override;
+  #else
   const char *get_name() override;
+  #endif
 
   void start() override;
   void stop() override;

@@ -11,7 +11,11 @@ static const char *const TAG = "ddp_light_effect";
 
 DDPLightEffect::DDPLightEffect(const char *name) : LightEffect(name) {}
 
+#if ESPHOME_VERSION_CODE >= VERSION_CODE(2026, 1, 0)
+esphome::StringRef DDPLightEffect::get_name() { return LightEffect::get_name(); }
+#else
 const char *DDPLightEffect::get_name() { return LightEffect::get_name(); }
+#endif
 
 void DDPLightEffect::start() {
   // backup gamma for restoring when effect ends
@@ -79,9 +83,11 @@ uint16_t DDPLightEffect::process_(const uint8_t *payload, uint16_t size, uint16_
   this->next_packet_will_be_first_ = false;
   this->last_ddp_time_ms_ = millis();
 
+  #if ESPHOME_VERSION_CODE >= VERSION_CODE(2026, 1, 0)
   ESP_LOGV(TAG, "Applying DDP data for '%s->%s': (%02x,%02x,%02x) size = %d, used = %d",
-           this->state_->get_name().c_str(), this->get_name().c_str(), payload[used], payload[used + 1],
+           this->state_->get_name(), this->get_name(), payload[used], payload[used + 1],
            payload[used + 2], size, used);
+  #endif
 
   float red = (float) payload[used] / 255.0f;
   float green = (float) payload[used + 1] / 255.0f;

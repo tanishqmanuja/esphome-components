@@ -3,6 +3,7 @@
 #ifdef USE_ARDUINO
 
 #include "esphome/core/component.h"
+#include "esphome/core/version.h"
 #include "esphome/components/light/light_effect.h"
 #include "esphome/components/light/light_output.h"
 
@@ -23,7 +24,11 @@ class DDPLightEffectBase {
  public:
   DDPLightEffectBase();
 
+  #if ESPHOME_VERSION_CODE >= VERSION_CODE(2026, 1, 0)
+  virtual esphome::StringRef get_name() = 0;
+  #else
   virtual const char *get_name() = 0;
+  #endif
 
   virtual void start();
   virtual void stop();

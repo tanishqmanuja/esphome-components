@@ -11,7 +11,11 @@ static const char *const TAG = "ddp_addressable_light_effect";
 
 DDPAddressableLightEffect::DDPAddressableLightEffect(const char *name) : AddressableLightEffect(name) {}
 
+#if ESPHOME_VERSION_CODE >= VERSION_CODE(2026, 1, 0)
+esphome::StringRef DDPAddressableLightEffect::get_name() { return AddressableLightEffect::get_name(); }
+#else
 const char *DDPAddressableLightEffect::get_name() { return AddressableLightEffect::get_name(); }
+#endif
 
 void DDPAddressableLightEffect::start() {
   // backup gamma for restoring when effect ends
@@ -98,8 +102,10 @@ uint16_t DDPAddressableLightEffect::process_(const uint8_t *payload, uint16_t si
     return 0;
   }
 
-  ESP_LOGV(TAG, "Applying DDP data for '%s' (size: %d - used: %d - num_pixels: %d)", get_name().c_str(), size, used,
+  #if ESPHOME_VERSION_CODE >= VERSION_CODE(2026, 1, 0)
+  ESP_LOGV(TAG, "Applying DDP data for '%s' (size: %d - used: %d - num_pixels: %d)", get_name(), size, used,
            num_pixels);
+  #endif
 
   // will be multiplied by RGB values in scale_* scaling modes
   float multiplier = 1.0f;

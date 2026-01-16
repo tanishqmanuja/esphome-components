@@ -15,7 +15,11 @@ constexpr float kInv255 = 1.0f / 255.0f;
 
 DDPMonochromaticLightEffect::DDPMonochromaticLightEffect(const char* name) : LightEffect(name) {}
 
+#if ESPHOME_VERSION_CODE >= VERSION_CODE(2026, 1, 0)
+esphome::StringRef DDPMonochromaticLightEffect::get_name() { return LightEffect::get_name(); }
+#else
 const char *DDPMonochromaticLightEffect::get_name() { return LightEffect::get_name(); }
+#endif
 
 void DDPMonochromaticLightEffect::start() {
   // backup gamma for restoring when effect ends
